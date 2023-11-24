@@ -1,5 +1,6 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
 import * as marshal from "./marshal"
+import {Account} from "./account.model"
 
 @Entity_()
 export class Transfer {
@@ -11,22 +12,22 @@ export class Transfer {
     id!: string
 
     @Column_("int4", {nullable: false})
-    block!: number
+    blockNumber!: number
 
-    @Index_()
-    @Column_("text", {nullable: false})
-    from!: string
-
-    @Index_()
-    @Column_("text", {nullable: false})
-    to!: string
-
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    value!: bigint
+    @Column_("timestamp with time zone", {nullable: false})
+    timestamp!: Date
 
     @Column_("text", {nullable: false})
     txHash!: string
 
+    @Index_()
+    @ManyToOne_(() => Account, {nullable: true})
+    from!: Account
+
+    @Index_()
+    @ManyToOne_(() => Account, {nullable: true})
+    to!: Account
+
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    timestamp!: bigint
+    amount!: bigint
 }

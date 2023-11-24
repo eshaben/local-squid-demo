@@ -1,14 +1,6 @@
 {
     "$schema": "https://cdn.subsquid.io/schemas/commands.json",
     "commands": {
-      "archive-up": {
-        "description": "Start local Moonbeam Archive",
-        "cmd": ["docker-compose", "-f", "archive/docker-compose.archive.yml", "up", "-d"]
-      },
-      "archive-down": {
-        "description": "Stop local Moonbeam Archive",
-        "cmd": ["docker-compose", "-f", "archive/docker-compose.archive.yml", "down"]
-      },
       "clean": {
         "description": "delete all build artifacts",
         "cmd": ["npx", "--yes", "rimraf", "lib"]
@@ -20,11 +12,11 @@
       },
       "up": {
         "description": "Start a PG database",
-        "cmd": ["docker-compose", "up", "-d"]
+        "cmd": ["docker", "compose", "up", "-d"]
       },
       "down": {
         "description": "Drop a PG database",
-        "cmd": ["docker-compose", "down"]
+        "cmd": ["docker", "compose", "down"]
       },
       "migration:apply": {
         "description": "Apply the DB migrations",
@@ -55,12 +47,12 @@
       "process": {
         "description": "Load .env and start the squid processor",
         "deps": ["build", "migration:apply"],
-        "cmd": ["node", "--require=dotenv/config", "lib/processor.js"]
+        "cmd": ["node", "--require=dotenv/config", "lib/main.js"]
       },
       "process:prod": {
         "description": "Start the squid processor",
         "deps": ["migration:apply"],
-        "cmd": ["node", "lib/processor.js"],
+        "cmd": ["node", "lib/main.js"],
         "hidden": true
       },
       "serve": {
